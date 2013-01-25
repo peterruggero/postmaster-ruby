@@ -21,10 +21,11 @@ require 'postmaster/util'
 require 'postmaster/json'
 require 'postmaster/postmaster_object'
 require 'postmaster/api_resource'
-require 'postmaster/list_object'
 
 require 'postmaster/address'
 require 'postmaster/shipment'
+require 'postmaster/package'
+require 'postmaster/tracking'
 
 # Errors
 require 'postmaster/errors/postmaster_error'
@@ -74,7 +75,6 @@ module Postmaster
     }
 
     params = Util.objects_to_ids(params)
-    PP.pp(params)
     url = self.api_url(url)
     case method.to_s.downcase.to_sym
     when :get, :head, :delete

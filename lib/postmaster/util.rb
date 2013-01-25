@@ -1,5 +1,6 @@
 module Postmaster
   module Util
+
     def self.objects_to_ids(h)
       case h
       when APIResource
@@ -12,25 +13,6 @@ module Postmaster
         h.map { |v| objects_to_ids(v) }
       else
         h
-      end
-    end
-
-    def self.convert_to_postmaster_object(resp)
-      types = {
-        'list' => ListObject
-      }
-      case resp
-      when Array
-        resp.map { |i| convert_to_postmaster_object(i) }
-      when Hash
-        # Try converting to a known object class.  If none available, fall back to generic APIResource
-        if klass_name = resp[:object]
-          klass = types[klass_name]
-        end
-        klass ||= PostmasterObject
-        klass.construct_from(resp)
-      else
-        resp
       end
     end
 

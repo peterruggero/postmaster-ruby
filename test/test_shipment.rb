@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 require 'test/unit'
 require 'postmaster'
+require 'rubygems'
 require 'shoulda'
 require 'mocha'
 require 'rest-client'
@@ -46,8 +47,28 @@ class TestShipmentRuby < Test::Unit::TestCase
   context "Shipment" do
 
     should "be created" do
-        result = Postmaster::Shipment.create(params=sample_shipment)
-        assert(result.instance_of? Postmaster::Shipment)
+      result = Postmaster::Shipment.create(params=sample_shipment)
+      assert(result.instance_of? Postmaster::Shipment)
+      assert(result.keys.include?(:status))
+      assert_equal("Processing", result[:status])
+      assert(result.keys.include?(:package))
+      assert(result[:package].instance_of? Postmaster::Package)
+      assert(result[:package].keys.include?(:type_))
+      assert_equal("CUSTOM", result[:package][:type_])
+      assert(result[:to].instance_of? Postmaster::Address)
+      assert(result[:from_].instance_of? Postmaster::Address)
+    end
+    
+    should "be the same after retreave" do
+      shipment1 = Postmaster::Shipment.create(params=sample_shipment)
+      shipment2 = Postmaster::Shipment.retrieve(shipment1.id)
+      
+      shipment1hash = shipment1.to_hash
+      shipment2hash = shipment2.to_hash
+      # label_urls can be different, so ignore it during check
+      shipment1hash[:packages][0].delete(:label_url)
+      shipment2hash[:packages][0].delete(:label_url)
+      assert_equal(shipment1hash, shipment2hash)
     end
     
   end

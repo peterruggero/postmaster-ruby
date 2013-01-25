@@ -4,7 +4,7 @@ module Postmaster
       module ClassMethods
         def all(filters={})
           response = Postmaster.request(:get, url, filters)
-          Util.convert_to_postmaster_object(response)
+          response[:results].map { |i| self.construct_from(i) }
         end
       end
 

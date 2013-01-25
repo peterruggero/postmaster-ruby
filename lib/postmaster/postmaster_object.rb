@@ -1,7 +1,7 @@
 module Postmaster
   class PostmasterObject
     include Enumerable
-
+   
     # The default :id method is deprecated and isn't useful to us
     if method_defined?(:id)
       undef :id
@@ -31,8 +31,24 @@ module Postmaster
       "#<#{self.class}:0x#{self.object_id.to_s(16)}#{id_string}> JSON: " + Postmaster::JSON.dump(@values, :pretty => true)
     end
 
-    def refresh_from(values, partial=false)
-      removed = partial ? Set.new : Set.new(@values.keys - values.keys)
+    def refresh_from(values)
+      # which keys should be converted to Postmaster_Objects
+      obj_keys = {
+        'Postmaster::Shipment.to' => Postmaster::Address,
+        'Postmaster::Shipment.from_' => Postmaster::Address,
+        'Postmaster::Shipment.package' => Postmaster::Package,
+        'Postmaster::AddressProposal.address' => Postmaster::Address,
+        #'Postmaster::Tracking.last_update' => 'DateTime',
+        #'Postmaster::TrackingHistory.timestamp' => 'DateTime'
+      }
+  
+      # which keys should be converted to list of Postmaster_Objects
+      obj_list_keys = {
+        'Postmaster::Shipment.packages' => Postmaster::Package,
+        'Postmaster::Tracking.history' => Postmaster::TrackingHistory
+      }
+        
+      removed = Set.new(@values.keys - values.keys)
       added = Set.new(values.keys - @values.keys)
       # Wipe old state before setting new.  This is useful for e.g. updating a
       # customer, where there is no persistent card parameter.  Mark those values
@@ -46,7 +62,19 @@ module Postmaster
         @values.delete(k)
       end
       values.each do |k, v|
-        @values[k] = Util.convert_to_postmaster_object(v)
+        full_key = self.class.name + "." + k.to_s
+        if obj_keys.has_key?(full_key)
+          klass = obj_keys[full_key]
+          @values[k] = klass.construct_from(v)
+        elsif obj_list_keys.has_key?(full_key)
+          klass = obj_list_keys[full_key]
+          @values[k] = []
+          v.each do |i|
+            @values[k].push(klass.construct_from(i))
+          end
+        else
+          @values[k] = v
+        end
       end
     end
 
@@ -76,7 +104,15 @@ module Postmaster
     end
 
     def to_hash
-      @values
+      result = @values.clone
+      result.each do |k, v|
+        if v.kind_of? Postmaster::PostmasterObject
+          result[k] = v.to_hash
+        elsif v.kind_of? Array and v[0].kind_of? Postmaster::PostmasterObject
+          result[k] = v.map { |i| i.to_hash }
+        end
+      end
+      result
     end
 
     def each(&blk)

@@ -4,7 +4,7 @@ module Postmaster
       module ClassMethods
         def create(params={})
           response = Postmaster.request(:post, self.url, params)
-          Util.convert_to_postmaster_object(response)
+          self.construct_from(response)
         end
       end
 
