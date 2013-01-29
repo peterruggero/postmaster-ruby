@@ -48,20 +48,20 @@ class TestPostmasterRuby < Test::Unit::TestCase
 
     should "creating a new APIResource should not fetch over the network" do
       @mock.expects(:get).never
-      c = Postmaster::Shipment.new("123")
+      c = Postmaster::Shipment.new(123)
     end
 
     should "creating a new APIResource from a hash should not fetch over the network" do
       @mock.expects(:get).never
       c = Postmaster::Shipment.construct_from({
-        :id => "123",
+        :id => 123,
         :param => "value"
       })
     end
 
     should "not fetch if only accessing id" do
       @mock.expects(:get).never
-      c = Postmaster::Shipment.new("123");
+      c = Postmaster::Shipment.new(123);
       c.id
     end
 
@@ -70,7 +70,7 @@ class TestPostmasterRuby < Test::Unit::TestCase
       response = test_response(test_invalid_api_key_error, 401)
       assert_raises Postmaster::AuthenticationError do
         @mock.expects(:get).once.raises(RestClient::ExceptionWithResponse.new(response, 401))
-        Postmaster::Shipment.retrieve("-1")
+        Postmaster::Shipment.retrieve(-1)
       end
     end
 
@@ -79,7 +79,7 @@ class TestPostmasterRuby < Test::Unit::TestCase
       response = test_response(test_invalid_api_key_error, 401)
       begin
         @mock.expects(:get).once.raises(RestClient::ExceptionWithResponse.new(response, 401))
-        Postmaster::Shipment.retrieve("-1")
+        Postmaster::Shipment.retrieve(-1)
       rescue Postmaster::AuthenticationError => e
         assert_equal(401, e.http_status)
         assert_equal(true, !!e.http_body)

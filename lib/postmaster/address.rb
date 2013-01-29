@@ -16,11 +16,7 @@ module Postmaster
         return
       end
       
-      result = []
-      proposals.each do |i|
-        result.push(Postmaster::AddressProposal.construct_from(i))
-      end
-      result
+      proposals.map { |i| Postmaster::AddressProposal.construct_from(i) }
     end
 
   end

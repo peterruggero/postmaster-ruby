@@ -11,11 +11,14 @@ module Postmaster
       "/v1/#{CGI.escape(class_name.downcase)}s"
     end
 
-    def url
+    def url(action=nil)
       unless id = self['id']
         raise InvalidRequestError.new("Could not determine which URL to request: #{self.class} instance has invalid ID: #{id.inspect}", 'id')
       end
-      "#{self.class.url}/#{CGI.escape(id)}"
+      if action.nil?
+        return "#{self.class.url}/#{CGI.escape(id.to_s)}"
+      end
+      "#{self.class.url}/#{CGI.escape(id.to_s)}/#{CGI.escape(action)}"
     end
 
     def refresh
@@ -25,7 +28,7 @@ module Postmaster
     end
 
     def self.retrieve(id)
-      instance = self.new(id.to_s)
+      instance = self.new(id)
       instance.refresh
       instance
     end

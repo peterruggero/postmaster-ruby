@@ -48,15 +48,15 @@ class TestShipmentRuby < Test::Unit::TestCase
 
     should "be created" do
       result = Postmaster::Shipment.create(params=sample_shipment)
-      assert(result.instance_of? Postmaster::Shipment)
+      assert_instance_of(Postmaster::Shipment, result)
       assert(result.keys.include?(:status))
       assert_equal("Processing", result[:status])
       assert(result.keys.include?(:package))
-      assert(result[:package].instance_of? Postmaster::Package)
+      assert_instance_of(Postmaster::Package, result[:package])
       assert(result[:package].keys.include?(:type_))
       assert_equal("CUSTOM", result[:package][:type_])
-      assert(result[:to].instance_of? Postmaster::Address)
-      assert(result[:from_].instance_of? Postmaster::Address)
+      assert_instance_of(Postmaster::Address, result[:to])
+      assert_instance_of(Postmaster::Address, result[:from_])
     end
     
     should "be the same after retreave" do
@@ -66,9 +66,32 @@ class TestShipmentRuby < Test::Unit::TestCase
       shipment1hash = shipment1.to_hash
       shipment2hash = shipment2.to_hash
       # label_urls can be different, so ignore it during check
+      shipment1hash[:package].delete(:label_url)
+      shipment2hash[:package].delete(:label_url)
       shipment1hash[:packages][0].delete(:label_url)
       shipment2hash[:packages][0].delete(:label_url)
       assert_equal(shipment1hash, shipment2hash)
+    end
+    
+    should "track" do
+        shipment = Postmaster::Shipment.create(params=sample_shipment)
+        result = shipment.track()
+        
+        assert_kind_of(Array, result)
+        assert(!result.empty?)
+        assert_instance_of(Postmaster::Tracking, result[0])
+        
+        assert(result[0].keys.include?(:status))
+        assert(result[0].keys.include?(:history))
+        assert(!result[0].history.empty?)
+        assert_instance_of(Postmaster::TrackingHistory, result[0].history[0])
+    end
+    
+    should "void" do
+        shipment = Postmaster::Shipment.create(params=sample_shipment)
+        result = shipment.void()
+        
+        assert(result.is_a?(TrueClass))
     end
     
   end
