@@ -10,13 +10,7 @@ module Postmaster
   
     def self.validate(params={})
       response = Postmaster.request(:post, '/v1/validate', params)
-      begin
-        proposals = response[:addresses][0][:proposals]
-      rescue NoMethodError => e
-        return
-      end
-      
-      proposals.map { |i| Postmaster::AddressProposal.construct_from(i) }
+      self.construct_from(response)
     end
 
   end

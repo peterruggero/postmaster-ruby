@@ -44,6 +44,7 @@ module Postmaster
   
       # which keys should be converted to list of Postmaster_Objects
       obj_list_keys = {
+        'Postmaster::AddressValidation.addresses' => Postmaster::Address,
         'Postmaster::Shipment.packages' => Postmaster::Package,
         'Postmaster::Tracking.history' => Postmaster::TrackingHistory
       }
