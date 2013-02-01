@@ -72,26 +72,35 @@ class TestShipmentRuby < Test::Unit::TestCase
       shipment2hash[:packages][0].delete(:label_url)
       assert_equal(shipment1hash, shipment2hash)
     end
+
+    should "list" do
+      shipments = Postmaster::Shipment.all()
+
+      assert_kind_of(Array, shipments)
+      shipments.each do |shipment|
+        assert_instance_of(Postmaster::Shipment, shipment)
+      end
+    end
     
     should "track" do
-        shipment = Postmaster::Shipment.create(params=sample_shipment)
-        result = shipment.track()
-        
-        assert_kind_of(Array, result)
-        assert(!result.empty?)
-        assert_instance_of(Postmaster::Tracking, result[0])
-        
-        assert(result[0].keys.include?(:status))
-        assert(result[0].keys.include?(:history))
-        assert(!result[0].history.empty?)
-        assert_instance_of(Postmaster::TrackingHistory, result[0].history[0])
+      shipment = Postmaster::Shipment.create(params=sample_shipment)
+      result = shipment.track()
+      
+      assert_kind_of(Array, result)
+      assert(!result.empty?)
+      assert_instance_of(Postmaster::Tracking, result[0])
+      
+      assert(result[0].keys.include?(:status))
+      assert(result[0].keys.include?(:history))
+      assert(!result[0].history.empty?)
+      assert_instance_of(Postmaster::TrackingHistory, result[0].history[0])
     end
     
     should "void" do
-        shipment = Postmaster::Shipment.create(params=sample_shipment)
-        result = shipment.void()
-        
-        assert(result.is_a?(TrueClass))
+      shipment = Postmaster::Shipment.create(params=sample_shipment)
+      result = shipment.void()
+      
+      assert(result.is_a?(TrueClass))
     end
     
   end

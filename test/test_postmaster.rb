@@ -34,6 +34,79 @@ class TestPostmasterRuby < Test::Unit::TestCase
       symbolized = Postmaster::Util.symbolize_names(start)
       assert_equal(finish, symbolized)
     end
+
+    should "flatten_params should convert data" do
+      start = {
+        :foo => 'bar',
+        :array => [
+           'foo', 
+           'bar',
+           { :foo => 'bar' }
+        ],
+        
+        :nested => {
+          :foo => 'bar',
+          :bar => 'foo'
+        }
+      }
+      finish = [
+        ["array[]", "bar"],
+        ["array[]", "foo"],
+        ["array[foo]", "bar"],
+        ["foo", "bar"],
+        ["nested[bar]", "foo"],
+        ["nested[foo]", "bar"]
+      ]
+
+      flattened = Postmaster::Util.flatten_params(start)
+      assert_equal(finish.sort, flattened.sort)
+    end
+  end
+  
+  context "PostmasterObject" do
+    should "behave like Hash" do
+      obj = Postmaster::PostmasterObject.construct_from({
+        :param1 => "value1",
+        :param2 => "value2",
+      })
+      
+      assert(obj.method_exists?(:param1))
+      assert(obj.method_exists?(:param2))
+      assert_equal('value1', obj.param1)
+      assert_equal('value2', obj.param2)
+
+      assert(obj.has_key?(:param1))
+      assert(obj.has_key?(:param2))
+      assert_equal('value1', obj[:param1])
+      assert_equal('value2', obj[:param2])
+      
+      assert_equal([:param1, :param2], obj.keys.sort_by {|sym| sym.to_s})
+      assert_equal(['value1', 'value2'], obj.values.sort)
+    end
+    
+    should "set and unset accessors" do
+      obj = Postmaster::PostmasterObject.new()
+      
+      assert(!obj.method_exists?(:foo))
+
+      obj[:foo] = 'bar'
+      assert(obj.method_exists?(:foo))
+      assert_equal('bar', obj.foo)
+      
+      obj.delete(:foo)
+      assert(!obj.method_exists?(:foo))
+    end
+    
+    should "be serializable" do
+      obj = Postmaster::PostmasterObject.construct_from({
+        :foo => "bar",
+      })
+      
+      assert_equal('{"foo":"bar"}', obj.to_s)
+      assert_equal('{"foo":"bar"}', obj.to_json)
+      assert(obj.inspect.include? 'JSON: {"foo":"bar"}')
+    end
+    
   end
 
   context "API Bindings" do

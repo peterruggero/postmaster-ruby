@@ -85,9 +85,21 @@ module Postmaster
     end
 
     def []=(k, v)
+      k = k.to_sym if k.kind_of?(String)
       send(:"#{k}=", v)
     end
 
+    def has_key?(k)
+      k = k.to_sym if k.kind_of?(String)
+      @values.has_key?(k)
+    end
+    
+    def delete(k)
+      k = k.to_sym if k.kind_of?(String)
+      @values.delete(k)
+      remove_accessors([k])
+    end
+    
     def keys
       @values.keys
     end
@@ -98,10 +110,6 @@ module Postmaster
 
     def to_json(*a)
       Postmaster::JSON.dump(@values)
-    end
-
-    def as_json(*a)
-      @values.as_json(*a)
     end
 
     def to_hash
@@ -149,7 +157,6 @@ module Postmaster
     end
 
     def method_missing(name, *args)
-      # TODO: only allow setting in updateable classes.
       if name.to_s.end_with?('=')
         attr = name.to_s[0...-1].to_sym
         @values[attr] = args[0]

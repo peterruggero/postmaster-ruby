@@ -35,4 +35,8 @@ result = Postmaster::Shipment.create(
   :reference => "Order # 54321"
 )
 
-result = Postmaster::Shipment.retrieve(1)
+shipment = Postmaster::Shipment.retrieve(1)
+result = shipment.track()
+
+shipment = Postmaster::Shipment.retrieve(1)
+result = shipment.void()

@@ -16,16 +16,6 @@ module Postmaster
       end
     end
 
-    def self.file_readable(file)
-      begin
-        File.open(file) { |f| }
-      rescue
-        false
-      else
-        true
-      end
-    end
-
     def self.symbolize_names(object)
       case object
       when Hash

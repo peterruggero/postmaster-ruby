@@ -9,7 +9,7 @@ Rake::TestTask.new(:test) do |test|
 end
 
 Rcov::RcovTask.new do |t|
-  t.test_files = FileList['test/test*.rb']
+  t.test_files = FileList['test/test_*.rb']
   #t.verbose = true     # uncomment to see the executed command
 end
 
