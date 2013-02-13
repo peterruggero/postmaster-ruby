@@ -31,7 +31,7 @@ Or install it yourself as:
 
     $ gem install postmaster
     
-## Source
+### Source
 
 Download the postmaster-ruby source:
 
@@ -45,6 +45,11 @@ If you want to build the gem from source:
 ## Usage
 
 See https://postmaster.io/docs for tutorials and documentation.
+
+## Issues
+
+Please use appropriately tagged github [issues](https://github.com/postmaster/postmaster-api/issues) 
+to request features or report bugs.
 
 ## Testing
     
