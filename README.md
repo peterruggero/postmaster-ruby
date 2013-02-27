@@ -44,7 +44,7 @@ If you want to build the gem from source:
 
 ## Usage
 
-See https://postmaster.io/docs for tutorials and documentation.
+See https://www.postmaster.io/docs for tutorials and documentation.
 
 ## Issues
 
