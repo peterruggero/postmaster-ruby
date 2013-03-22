@@ -159,7 +159,13 @@ module Postmaster
     begin
       error_obj = Postmaster::JSON.load(rbody)
       error_obj = Util.symbolize_names(error_obj)
-      error = error_obj[:error] or raise PostmasterError.new # escape from parsing
+      if error_obj.has_key?(:message)
+        error = error_obj
+      elsif error_obj.has_key?(:error)
+        error = error_obj[:error]
+      else
+        raise PostmasterError.new # escape from parsing
+      end
     rescue MultiJson::DecodeError, PostmasterError
       raise APIError.new("Invalid response object from API: #{rbody.inspect} (HTTP response code was #{rcode})", rcode, rbody)
     end
