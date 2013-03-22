@@ -51,5 +51,27 @@ class TestAddressRuby < Test::Unit::TestCase
       end
     end
     
+    should "be valid with address instead of line1" do
+      result = Postmaster::AddressValidation.validate({
+        :company => "Asls",
+        :contact => "Joe Smith",
+        :address => ["1110 Algarita Ave"],
+        :city => "Austin",
+        :state => "TX",
+        :zip_code => "78704",
+        :country => "US",
+      })
+      
+      assert_instance_of(Postmaster::AddressValidation, result);
+      assert(result.keys.include?(:status))
+      assert_kind_of(Array, result[:addresses])
+      assert(!result[:addresses].empty?)
+      
+      address = result[:addresses][0]
+      assert_instance_of(Postmaster::Address, address);
+      assert(address.keys.include?(:zip_code))
+      assert_equal("78704", address[:zip_code])
+    end
+    
   end
 end

@@ -1,8 +1,14 @@
 module Postmaster
   
   class Shipment < APIResource
-    include Postmaster::APIOperations::Create
     include Postmaster::APIOperations::List
+    
+    def self.create(params={})
+      Util.normalize_address(params[:to])
+      Util.normalize_address(params[:from_])
+      response = Postmaster.request(:post, self.url, params)
+      self.construct_from(response)
+    end
     
     def track
       response = Postmaster.request(:get, url('track'))

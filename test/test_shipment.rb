@@ -25,7 +25,7 @@ class TestShipmentRuby < Test::Unit::TestCase
     :from_ => {
       :company => "ASLS",
       :contact => "Joe Smith",
-      :line1 => "1110 Algarita Ave",
+      :address => ["1110 Algarita Ave"],
       :city => "Austin",
       :state => "TX",
       :zip_code => "78704-4429",
