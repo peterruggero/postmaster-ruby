@@ -25,7 +25,7 @@ class TestShipmentRuby < Test::Unit::TestCase
     :from_ => {
       :company => "ASLS",
       :contact => "Joe Smith",
-      :line1 => "1110 Algarita Ave",
+      :address => ["1110 Algarita Ave"],
       :city => "Austin",
       :state => "TX",
       :zip_code => "78704-4429",
@@ -53,10 +53,10 @@ class TestShipmentRuby < Test::Unit::TestCase
       assert_equal("Processing", result[:status])
       assert(result.keys.include?(:package))
       assert_instance_of(Postmaster::Package, result[:package])
-      assert(result[:package].keys.include?(:type_))
-      assert_equal("CUSTOM", result[:package][:type_])
+      assert(result[:package].keys.include?(:type))
+      assert_equal("CUSTOM", result[:package][:type])
       assert_instance_of(Postmaster::Address, result[:to])
-      assert_instance_of(Postmaster::Address, result[:from_])
+      assert_instance_of(Postmaster::Address, result[:from])
     end
     
     should "be the same after retreave" do

@@ -35,7 +35,7 @@ module Postmaster
       # which keys should be converted to Postmaster_Objects
       obj_keys = {
         'Postmaster::Shipment.to' => Postmaster::Address,
-        'Postmaster::Shipment.from_' => Postmaster::Address,
+        'Postmaster::Shipment.from' => Postmaster::Address,
         'Postmaster::Shipment.package' => Postmaster::Package,
         'Postmaster::AddressProposal.address' => Postmaster::Address,
         #'Postmaster::Tracking.last_update' => 'DateTime',

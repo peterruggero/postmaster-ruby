@@ -64,5 +64,15 @@ module Postmaster
       end
       result
     end
+    
+    def self.normalize_address(params)
+      if params != nil && params.has_key?(:address)
+        line1, line2, line3 = params.delete(:address)
+        params[:line1] = line1 if line1
+        params[:line2] = line2 if line2
+        params[:line3] = line3 if line3
+      end
+    end
+    
   end
 end
