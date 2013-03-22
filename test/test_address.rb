@@ -38,19 +38,17 @@ class TestAddressRuby < Test::Unit::TestCase
     end
     
     should "be invalid" do
-      result = Postmaster::AddressValidation.validate({
-        :company => "Asls",
-        :contact => "Joe Smith",
-        :line1 => "007 Nowhere Ave",
-        :city => "Austin",
-        :state => "TX",
-        :zip_code => "00001",
-        :country => "US",
-      })
-      
-      assert_instance_of(Postmaster::AddressValidation, result);
-      assert(result.keys.include?(:status))
-      assert_equal("WRONG_ADDRESS", result[:status])
+      assert_raises Postmaster::InvalidRequestError do
+          result = Postmaster::AddressValidation.validate({
+            :company => "Asls",
+            :contact => "Joe Smith",
+            :line1 => "007 Nowhere Ave",
+            :city => "Austin",
+            :state => "TX",
+            :zip_code => "00001",
+            :country => "US",
+          })
+      end
     end
     
   end
