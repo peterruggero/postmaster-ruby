@@ -10,9 +10,7 @@ require 'uri'
 
 class TestAddressRuby < Test::Unit::TestCase
   include Mocha
- 
-  sample_address = 
- 
+
   context "Address" do
 
     should "be valid" do
