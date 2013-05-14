@@ -1,29 +1,59 @@
 require "postmaster"
 
+# at startup set API key
 Postmaster.api_key = "example-api-key"
 
+# at first validate recipient address
 result = Postmaster::AddressValidation.validate(
-  :company => "ASLS",
+  :company => "Postmaster Inc.",
   :contact => "Joe Smith",
-  :line1 => "1110 Someplace Ave.",
+  :line1 => "701 Brazos St. Suite 1616",
   :city => "Austin",
   :state => "TX",
-  :zip => "78704",
+  :zip => "78701",
   :country => "US"
 )
+#puts result.inspect
 
+# if address is ok you can ask for time and rates for it
+result = Postmaster::TransitTimes.get(
+    :from_zip => "78701",
+    :to_zip => "78704",
+    :weight => 1.5,
+    :carrier => "fedex"
+)
+#puts result.inspect
+
+result = Postmaster::Rates.get(
+    :from_zip => "78701",
+    :to_zip => "78704",
+    :weight => 1.5,
+    :carrier => "fedex"
+)
+#puts result.inspect
+
+# when user will choose delivery type you create shipment
 result = Postmaster::Shipment.create(
-  :to => {
-    :company => "ASLS",
+  :from => {
+    :company => "Postmaster Inc.",
     :contact => "Joe Smith",
-    :line1 => "1110 Someplace Ave.",
+    :line1 => "701 Brazos St. Suite 1616",
     :city => "Austin",
     :state => "TX",
-    :zip_code => "78704",
-    :phone_no => "919-720-7941",
+    :zip_code => "78701",
+    :phone_no => "512-693-4040",
     :country => "US"
   },
-  :carrier => "ups",
+  :to => {
+    :contact => "Joe Smith",
+    :line1 => "701 Brazos St. Suite 1616",
+    :city => "Austin",
+    :state => "TX",
+    :zip_code => "78701",
+    :phone_no => "512-693-4040",
+    :country => "US"
+  },
+  :carrier => "fedex",
   :service => "2DAY",
   :package => {
     :value => 55,
@@ -34,9 +64,19 @@ result = Postmaster::Shipment.create(
   },
   :reference => "Order # 54321"
 )
+#puts result.inspect
 
-shipment = Postmaster::Shipment.retrieve(1)
+# store in your DB shipment ID for later use
+shipment_id = result.id
+
+# anytime you can extract shipment data
+shipment = Postmaster::Shipment.retrieve(shipment_id)
+#puts shipment.inspect
+
+# or check delivery status
 result = shipment.track()
+#puts result.inspect
 
-shipment = Postmaster::Shipment.retrieve(1)
+# you can cancel shipment, but only before being picked up by the carrier
 result = shipment.void()
+#puts result.inspect
