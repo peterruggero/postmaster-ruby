@@ -5,7 +5,7 @@ module Postmaster
     
     def self.create(params={})
       Util.normalize_address(params[:to])
-      Util.normalize_address(params[:from_])
+      Util.normalize_address(params[:from])
       response = Postmaster.request(:post, self.url, params)
       self.construct_from(response)
     end

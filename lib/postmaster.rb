@@ -2,6 +2,7 @@
 require 'pp'
 require 'cgi'
 require 'set'
+require 'date'
 require 'rubygems'
 require 'openssl'
 
@@ -26,6 +27,8 @@ require 'postmaster/address'
 require 'postmaster/shipment'
 require 'postmaster/package'
 require 'postmaster/tracking'
+require 'postmaster/transit_times'
+require 'postmaster/rates'
 
 # Errors
 require 'postmaster/errors/postmaster_error'

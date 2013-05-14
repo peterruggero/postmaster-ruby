@@ -13,35 +13,31 @@ class TestShipmentRuby < Test::Unit::TestCase
  
   sample_shipment = {
     :to => {
-      :company => "ASLS",
+      :company => "Postmaster Inc.",
       :contact => "Joe Smith",
-      :line1 => "1110 Algarita Ave",
+      :line1 => "701 Brazos St. Suite 1616",
       :city => "Austin",
       :state => "TX",
-      :zip_code => "78704-4429",
-      :phone_no => "919-720-7941",
-      :country => "US"
+      :zip_code => "78701",
+      :phone_no => "512-693-4040",
     },
-    :from_ => {
-      :company => "ASLS",
+    :from => {
+      :company => "Postmaster Inc.",
       :contact => "Joe Smith",
-      :address => ["1110 Algarita Ave"],
+      :address => ["701 Brazos St. Suite 1616"],
       :city => "Austin",
       :state => "TX",
-      :zip_code => "78704-4429",
-      :phone_no => "919-720-7941",
-      :country => "US"
+      :zip_code => "78701",
+      :phone_no => "512-693-4040",
     },
-    :carrier => "ups",
+    :carrier => "fedex",
     :service => "2DAY",
     :package => {
-      :value => 55,
       :weight => 1.5,
       :length => 10,
       :width => 6,
       :height => 8,
     },
-    :reference => "Order # 54321"
   }
  
   context "Shipment" do
@@ -51,10 +47,12 @@ class TestShipmentRuby < Test::Unit::TestCase
       assert_instance_of(Postmaster::Shipment, result)
       assert(result.keys.include?(:status))
       assert_equal("Processing", result[:status])
-      assert(result.keys.include?(:package))
-      assert_instance_of(Postmaster::Package, result[:package])
-      assert(result[:package].keys.include?(:type))
-      assert_equal("CUSTOM", result[:package][:type])
+      assert(result.keys.include?(:packages))
+      assert_kind_of(Array, result[:packages])
+      assert(!result[:packages].empty?)
+      assert_instance_of(Postmaster::Package, result[:packages][0])
+      assert(result[:packages][0].keys.include?(:type))
+      assert_equal("CUSTOM", result[:packages][0][:type])
       assert_instance_of(Postmaster::Address, result[:to])
       assert_instance_of(Postmaster::Address, result[:from])
     end
@@ -66,8 +64,6 @@ class TestShipmentRuby < Test::Unit::TestCase
       shipment1hash = shipment1.to_hash
       shipment2hash = shipment2.to_hash
       # label_urls can be different, so ignore it during check
-      shipment1hash[:package].delete(:label_url)
-      shipment2hash[:package].delete(:label_url)
       shipment1hash[:packages][0].delete(:label_url)
       shipment2hash[:packages][0].delete(:label_url)
       assert_equal(shipment1hash, shipment2hash)
