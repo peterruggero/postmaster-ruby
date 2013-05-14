@@ -26,6 +26,7 @@ require 'postmaster/address'
 require 'postmaster/shipment'
 require 'postmaster/package'
 require 'postmaster/tracking'
+require 'postmaster/transit_times'
 
 # Errors
 require 'postmaster/errors/postmaster_error'

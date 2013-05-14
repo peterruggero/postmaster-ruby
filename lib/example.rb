@@ -1,7 +1,7 @@
 require "postmaster"
 
 # at startup set API key
-Postmaster.api_key = "tt_ODcwMDQ6Y0RzeVBKNXN4WHNSTVptSFhtMDlVMk9MMlJr" #"example-api-key"
+Postmaster.api_key = "example-api-key"
 
 # at first validate recipient address
 result = Postmaster::AddressValidation.validate(
@@ -14,6 +14,15 @@ result = Postmaster::AddressValidation.validate(
   :country => "US"
 )
 #puts result.inspect
+
+# if address is ok you can ask for time and rates for it
+result = Postmaster::TransitTimes.get(
+    :from_zip => "78701",
+    :to_zip => "78704",
+    :weight => 1.5,
+    :carrier => "fedex"
+)
+puts result.inspect
 
 # when user will choose delivery type you create shipment
 result = Postmaster::Shipment.create(

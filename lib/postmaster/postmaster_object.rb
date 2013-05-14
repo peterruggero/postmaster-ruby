@@ -38,8 +38,9 @@ module Postmaster
         'Postmaster::Shipment.from' => Postmaster::Address,
         'Postmaster::Shipment.package' => Postmaster::Package,
         'Postmaster::AddressProposal.address' => Postmaster::Address,
-        #'Postmaster::Tracking.last_update' => 'DateTime',
-        #'Postmaster::TrackingHistory.timestamp' => 'DateTime'
+        'Postmaster::Tracking.last_update' => 'DateTime',
+        'Postmaster::TrackingHistory.timestamp' => 'DateTime',
+        'Postmaster::TransitTime.delivery_timestamp' => 'DateTime'
       }
   
       # which keys should be converted to list of Postmaster_Objects
@@ -66,7 +67,11 @@ module Postmaster
         full_key = self.class.name + "." + k.to_s
         if obj_keys.has_key?(full_key)
           klass = obj_keys[full_key]
-          @values[k] = klass.construct_from(v)
+          if klass == 'DateTime'
+            @values[k] = DateTime.strptime(v.to_s, '%s')
+          else
+            @values[k] = klass.construct_from(v)
+          end
         elsif obj_list_keys.has_key?(full_key)
           klass = obj_list_keys[full_key]
           @values[k] = []
