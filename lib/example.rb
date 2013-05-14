@@ -22,7 +22,15 @@ result = Postmaster::TransitTimes.get(
     :weight => 1.5,
     :carrier => "fedex"
 )
-puts result.inspect
+#puts result.inspect
+
+result = Postmaster::Rates.get(
+    :from_zip => "78701",
+    :to_zip => "78704",
+    :weight => 1.5,
+    :carrier => "fedex"
+)
+#puts result.inspect
 
 # when user will choose delivery type you create shipment
 result = Postmaster::Shipment.create(

@@ -22,8 +22,6 @@ class TestTrackingRuby < Test::Unit::TestCase
       assert(!result.history.empty?)
       assert_instance_of(Postmaster::TrackingHistory, result.history[0])
     end
-    
 
-    
   end
 end

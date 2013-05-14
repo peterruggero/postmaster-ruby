@@ -5,6 +5,7 @@ require 'rubygems'
 require 'shoulda'
 require 'mocha'
 require 'rest-client'
+require 'date'
 require 'cgi'
 require 'uri'
 
