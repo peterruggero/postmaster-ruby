@@ -80,3 +80,29 @@ result = shipment.track()
 # you can cancel shipment, but only before being picked up by the carrier
 result = shipment.void()
 #puts result.inspect
+
+# create box example
+result = Postmaster::Package.create(
+    :width => 10,
+    :height => 12,
+    :length => 8,
+    :name => 'My Box'
+)
+#puts result.inspect
+
+# list boxes example
+result = Postmaster::Package.all(
+    :limit => 2
+)
+#puts result.inspect
+
+# fit items in box example
+result = Postmaster::Package.fit(
+  "items" =>
+    [{"width" => 2.2, "length" => 3, "height" => 1, "count" => 2}],
+  "packages" => [
+    {"width" => 6, "length" => 6, "height" => 6, "sku" => "123ABC"},
+    {"width" => 12, "length" => 12, "height" => 12, "sku" => "456XYZ"}
+  ]
+)
+#puts result.inspect

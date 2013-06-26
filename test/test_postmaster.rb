@@ -101,10 +101,14 @@ class TestPostmasterRuby < Test::Unit::TestCase
       obj = Postmaster::PostmasterObject.construct_from({
         :foo => "bar",
       })
-      
-      assert_equal('{"foo":"bar"}', obj.to_s)
+      if MultiJson.adapter.to_s == 'MultiJson::Adapters::Yajl'
+        expected = "{\n  \"foo\": \"bar\"\n}"
+      else
+        expected = '{"foo":"bar"}'
+      end
+      assert_equal(expected, obj.to_s)
       assert_equal('{"foo":"bar"}', obj.to_json)
-      assert(obj.inspect.include? 'JSON: {"foo":"bar"}')
+      assert(obj.inspect.include? 'JSON: '+expected)
     end
     
   end
