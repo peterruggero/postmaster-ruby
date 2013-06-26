@@ -79,7 +79,7 @@ class TestShipmentRuby < Test::Unit::TestCase
     end
     
     should "track" do
-      shipment = Postmaster::Shipment.create(params=sample_shipment)
+      shipment = Postmaster::Shipment.retrieve('2010')
       result = shipment.track()
       
       assert_kind_of(Array, result)
