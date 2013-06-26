@@ -88,7 +88,11 @@ module Postmaster
       end
       payload = nil
     else
-      payload = Util.flatten_params(params).collect{|(key, value)| "#{key}=#{Util.url_encode(value)}"}.join('&')
+      if params.kind_of? String
+        payload = params
+      else
+        payload = Util.flatten_params(params).collect{|(key, value)| "#{key}=#{Util.url_encode(value)}"}.join('&')
+      end
     end
 
     begin
