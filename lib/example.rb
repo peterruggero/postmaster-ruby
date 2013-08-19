@@ -81,6 +81,21 @@ result = shipment.track()
 result = shipment.void()
 #puts result.inspect
 
+# list all created shipments
+result = Postmaster::Shipment.all()
+#puts result.inspect
+
+# list 3 newest shipments
+result = Postmaster::Shipment.all(:limit => 3)
+#puts result.inspect
+
+# monitor external package
+result = Postmaster::Tracking.monitor_external(
+    :tracking_no => "1ZW470V80310800043",
+    :url => "http://example.com/your-http-post-listener"
+)
+#puts result.inspect
+
 # create box example
 result = Postmaster::Package.create(
     :width => 10,
