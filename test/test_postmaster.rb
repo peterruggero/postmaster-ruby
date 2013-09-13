@@ -50,9 +50,9 @@ class TestPostmasterRuby < Test::Unit::TestCase
         }
       }
       finish = [
+        ["array[2][foo]", "bar"],
         ["array[]", "bar"],
         ["array[]", "foo"],
-        ["array[foo]", "bar"],
         ["foo", "bar"],
         ["nested[bar]", "foo"],
         ["nested[foo]", "bar"]
