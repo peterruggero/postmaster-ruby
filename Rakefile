@@ -1,18 +1,19 @@
 require 'rubygems'
 require 'rake/testtask'
-require 'rcov/rcovtask'
 
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
+  test.test_files = FileList['test/test_*.rb'].exclude('test/test_helper.rb')
   test.verbose = true
 end
 
-Rcov::RcovTask.new do |t|
-  t.test_files = FileList['test/test_*.rb']
-  #t.verbose = true     # uncomment to see the executed command
+if ENV['coverage'] and RUBY_VERSION < "1.9"
+  require 'rcov/rcovtask'
+  Rcov::RcovTask.new do |t|
+    t.test_files = FileList['test/test_*.rb'].exclude('test/test_helper.rb')
+    #t.verbose = true     # uncomment to see the executed command
+  end
 end
 
 
 task :default => [:test]
-

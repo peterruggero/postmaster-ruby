@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+require 'test_helper'
 require 'test/unit'
 require 'postmaster'
 require 'rubygems'
