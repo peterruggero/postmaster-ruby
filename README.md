@@ -53,5 +53,4 @@ to request features or report bugs.
 
 ## Testing
     
-    $ cd tests
     $ PM_API_KEY=your-api-key rake test
