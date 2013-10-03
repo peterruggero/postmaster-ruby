@@ -53,11 +53,12 @@ module Postmaster
 
     def self.flatten_params_array(value, calculated_key)
       result = []
-      value.each do |elem|
+      value.each_with_index do |elem,index|
+        calculated_key_with_index = "#{calculated_key}[#{index}]"
         if elem.is_a?(Hash)
-          result += flatten_params(elem, calculated_key)
+          result += flatten_params(elem, calculated_key_with_index)
         elsif elem.is_a?(Array)
-          result += flatten_params_array(elem, calculated_key)
+          result += flatten_params_array(elem, calculated_key_with_index)
         else
           result << ["#{calculated_key}[]", elem]
         end
