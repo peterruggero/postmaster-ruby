@@ -1,3 +1,12 @@
+if ENV['coverage'] and RUBY_VERSION >= "1.9"
+  require 'simplecov'
+  require 'simplecov-rcov'
+  SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+  SimpleCov.start do
+    add_filter 'test_'
+  end
+end
+
 require 'stringio'
 require 'test/unit'
 require 'postmaster'
