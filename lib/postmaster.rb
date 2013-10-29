@@ -36,6 +36,7 @@ require 'postmaster/errors/api_error'
 require 'postmaster/errors/api_connection_error'
 require 'postmaster/errors/invalid_request_error'
 require 'postmaster/errors/authentication_error'
+require 'postmaster/errors/permission_error'
 
 
 module Postmaster
