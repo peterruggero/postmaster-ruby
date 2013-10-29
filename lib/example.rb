@@ -10,7 +10,7 @@ result = Postmaster::AddressValidation.validate(
   :line1 => "701 Brazos St. Suite 1616",
   :city => "Austin",
   :state => "TX",
-  :zip => "78701",
+  :zip_code => "78701",
   :country => "US"
 )
 #puts result.inspect
