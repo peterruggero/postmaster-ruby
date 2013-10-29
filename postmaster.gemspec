@@ -5,6 +5,7 @@ require 'postmaster/version'
 spec = Gem::Specification.new do |s|
   s.name = 'postmaster'
   s.version = Postmaster::VERSION
+  s.license = 'MIT'
   s.summary = 'Library for postmaster.io service'
   s.description = 'Postmaster takes the pain out of sending shipments via UPS, Fedex, and USPS. Save money before you ship, while you ship, and after you ship. See https://www.postmaster.io for details.'
   s.authors = ['Postmaster']
