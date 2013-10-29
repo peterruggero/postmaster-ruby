@@ -92,7 +92,8 @@ result = Postmaster::Shipment.all(:limit => 3)
 # monitor external package
 result = Postmaster::Tracking.monitor_external(
     :tracking_no => "1ZW470V80310800043",
-    :url => "http://example.com/your-http-post-listener"
+    :url => "http://example.com/your-http-post-listener",
+    :events => ['Delivered', 'Exception']
 )
 #puts result.inspect
 
