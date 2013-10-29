@@ -60,7 +60,7 @@ module Postmaster
         elsif elem.is_a?(Array)
           result += flatten_params_array(elem, calculated_key_with_index)
         else
-          result << ["#{calculated_key}[]", elem]
+          result << [calculated_key_with_index, elem]
         end
       end
       result
