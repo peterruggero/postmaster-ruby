@@ -114,10 +114,10 @@ result = Postmaster::Package.all(
 # fit items in box example
 result = Postmaster::Package.fit(
   "items" =>
-    [{"width" => 2.2, "length" => 3, "height" => 1, "count" => 2}],
+    [{"width" => 2.2, "length" => 3, "height" => 1, "count" => 2, "sku" => "123ABC"}],
   "packages" => [
-    {"width" => 6, "length" => 6, "height" => 6, "sku" => "123ABC"},
-    {"width" => 12, "length" => 12, "height" => 12, "sku" => "456XYZ"}
+    {"width" => 6, "length" => 6, "height" => 6},
+    {"width" => 12, "length" => 12, "height" => 12}
   ]
 )
 #puts result.inspect
